@@ -1,9 +1,13 @@
-import { Button } from "@workspace/ui/components/button"
+import { getCurrentUser } from "@workspace/auth/server";
+import { Button } from "@workspace/ui/components";
 
-export default function Page() {
+export default async function Page() {
+
+  const user = await getCurrentUser();
   return (
     <div className="flex min-h-svh p-6">
       <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
+      <pre>{JSON.stringify(user, null, 2)}</pre>
         <div>
           <h1 className="font-medium">Project ready!</h1>
           <p>You may now add components and start building.</p>

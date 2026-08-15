@@ -1,5 +1,6 @@
 import { UserRole, type UserRole as UserRoleType } from "@workspace/core/enums";
-import { UserModel } from "@workspace/db/models";
+import { auth } from "@workspace/auth/config";
+import { fromNodeHeaders } from "better-auth/node";
 import type { NextFunction, Request, RequestHandler, Response } from "express";
 
 export type RequestActor = {
@@ -14,31 +15,42 @@ function isAdminRole(role: UserRoleType): boolean {
     return role === UserRole.ADMIN || role === UserRole.SUPER_ADMIN;
 }
 
+function isUserRole(role: unknown): role is UserRoleType {
+    return Object.values(UserRole).includes(role as UserRoleType);
+}
+
 export function getRequestActor(res: Response): RequestActor {
     return res.locals.actor as RequestActor;
 }
 
 export const authenticateUser: RequestHandler = async (req, res, next) => {
     try {
-        const userId = req.get("x-user-id")?.trim();
+        const session = await auth.api.getSession({
+            headers: fromNodeHeaders(req.headers),
+        });
 
-        if (!userId) {
-            res.status(401).json({ error: "x-user-id header is required" });
+        if (!session?.user?.id) {
+            res.status(401).json({ error: "Authentication is required" });
             return;
         }
 
-        const user = await UserModel.findOne({ _id: userId, isDelete: { $ne: true } })
-            .select("_id role")
-            .lean()
-            .exec();
+        const user = session.user as typeof session.user & {
+            role?: unknown;
+            isDelete?: boolean;
+        };
 
-        if (!user) {
-            res.status(401).json({ error: "Authenticated user not found" });
+        if (user.isDelete) {
+            res.status(401).json({ error: "User account is deleted" });
+            return;
+        }
+
+        if (!isUserRole(user.role)) {
+            res.status(403).json({ error: "User role is invalid" });
             return;
         }
 
         res.locals.actor = {
-            id: String(user._id),
+            id: String(user.id),
             role: user.role,
             isAdmin: isAdminRole(user.role),
         } satisfies RequestActor;

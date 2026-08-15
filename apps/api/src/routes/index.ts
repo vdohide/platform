@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { isConnected } from '@workspace/db/mongoose';
 import pkg from '../../package.json' with { type: 'json' };
+
 import usersRoutes from './users.routes';
 
 const router: Router = Router();
@@ -22,7 +23,7 @@ router.use((req, res, next) => {
     res.status(404).json({
         error: 'Endpoint not found',
         message: `Cannot ${req.method} ${req.originalUrl}`,
-        availableEndpoints: ['/health', '/users']
+        availableEndpoints: ['/v2/health', '/v2/users']
     });
 });
 

@@ -9,11 +9,14 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@workspace/auth": "workspace:*",
         "@workspace/core": "workspace:*",
         "@workspace/db": "workspace:*",
+        "better-auth": "^1.6.29",
         "cors": "^2.8.5",
         "dotenv": "^17.4.2",
         "express": "5.2.1",
+        "mongodb": "7.5.0",
         "mongoose": "9.7.4"
     },
     "devDependencies": {

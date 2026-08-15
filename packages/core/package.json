@@ -16,6 +16,8 @@
     "typescript": "^5"
   },
   "exports": {
-    "./enums": "./src/enums.ts"
+    "./enums": "./src/enums.ts",
+    "./utils": "./src/utils.ts",
+    "./validators": "./src/validators.ts"
   }
 }
