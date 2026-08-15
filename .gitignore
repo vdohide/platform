@@ -43,4 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.setup_project
 scripts/*-install.txt

@@ -73,6 +73,9 @@ export async function proxy(req: NextRequest) {
 }
 
 async function getSession(req: NextRequest): Promise<ProxySession | null> {
+    const startedAt = performance.now();
+    let responseStatus: number | "network-error" = "network-error";
+
     try {
         const headers = new Headers();
         headers.set("cookie", req.headers.get("cookie") ?? "");
@@ -85,6 +88,7 @@ async function getSession(req: NextRequest): Promise<ProxySession | null> {
             headers,
             cache: "no-store",
         });
+        responseStatus = response.status;
 
         if (!response.ok) {
             return null;
@@ -94,6 +98,11 @@ async function getSession(req: NextRequest): Promise<ProxySession | null> {
     } catch (error) {
         console.error("[Proxy] Failed to retrieve auth session", error);
         return null;
+    } finally {
+        const durationMs = Math.round(performance.now() - startedAt);
+        console.info(
+            `[Proxy] getSession took ${durationMs}ms status=${responseStatus} path=${req.nextUrl.pathname}`,
+        );
     }
 }
 
@@ -122,11 +131,6 @@ function getRoutingDecision(
     // Allow /v1 API routes for unauthenticated users
     if (pathName.startsWith('/v1') && !session) {
         return NextResponse.next();
-    }
-
-    // Handle Root Path ("/")
-    if (pathName === "/") {
-        return handleRootPath(req, { session, twoFactorCookie, accountsUrl, currentUrl });
     }
 
     // Handle Missing 2FA Cookie when accessing 2FA Route
@@ -158,30 +162,6 @@ function getRoutingDecision(
     }
 
     // Default: Allow request
-    return NextResponse.next();
-}
-
-function handleRootPath(req: NextRequest, ctx: { session: ProxySession | null, twoFactorCookie: ProxyCookie | undefined, accountsUrl: string, currentUrl: string }) {
-    const { session, twoFactorCookie, accountsUrl, currentUrl } = ctx;
-    const callbackUrl = getCallbackUrl(req, currentUrl);
-
-    if (twoFactorCookie && !session) {
-        return redirectTo(accountsUrl, Auth2FARoute, callbackUrl);
-    }
-
-    if (session && twoFactorCookie) {
-        return redirectTo(currentUrl, Auth2FARoute, req.nextUrl.searchParams.get("callbackUrl"));
-    }
-
-    if (session) {
-        const cb = safeRedirectPath(req.nextUrl.searchParams.get("callbackUrl"));
-        if (cb) {
-            return NextResponse.redirect(new URL(cb, currentUrl));
-        }
-        return NextResponse.next();
-    }
-
-    // Allow unauthenticated root path (landing page)
     return NextResponse.next();
 }
 
@@ -231,6 +211,6 @@ function appendCallbackCookie(req: NextRequest, response: NextResponse, isAuthRo
 export const config = {
     matcher: [
         '/api/auth/error',
-        '/((?!api|locales|assets|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest|opengraph-image|twitter-image|icon|apple-icon|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.webp|.*\\.ico|.*\\.json|\\.well-known).*)',
+        '/((?!$|api|locales|assets|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest|opengraph-image|twitter-image|icon|apple-icon|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.webp|.*\\.ico|.*\\.json|\\.well-known).*)',
     ],
 };

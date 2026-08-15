@@ -1,4 +1,5 @@
 import { AuthFallback, EmailPasswordLogin } from "@/components/auth";
+import { SocialLoginButtons } from "@/components/auth/section/social-login";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components";
 import React from "react";
 
@@ -23,6 +24,13 @@ export default async function Loginpage() {
                 <CardContent>
                     <React.Suspense fallback={<AuthFallback />}>
                         <EmailPasswordLogin />
+                    </React.Suspense>
+                    <React.Suspense>
+                        <SocialLoginButtons
+                            onlySocial={false}
+                            google={true}
+                            github={true}
+                        />
                     </React.Suspense>
                 </CardContent>
             </Card>
