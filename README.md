@@ -2,6 +2,10 @@
 
 This is a Next.js monorepo template with shadcn/ui.
 
+## API deployment
+
+วิธีสร้าง GitHub access token และติดตั้ง API จาก private GitHub Release ดูได้ที่ [scripts/README.md](./scripts/README.md)
+
 ## Adding components
 
 To add components to your app, run the following command at the root of your `web` app:
