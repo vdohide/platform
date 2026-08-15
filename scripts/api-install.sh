@@ -175,10 +175,16 @@ JSON_HEADERS=(
     -H "Authorization: Bearer $ACCESS_TOKEN"
     -H "X-GitHub-Api-Version: $GITHUB_API_VERSION"
 )
+CURL_RETRY_ARGS=(--retry 5 --retry-delay 3)
+if curl --retry-all-errors --version >/dev/null 2>&1; then
+    CURL_RETRY_ARGS+=(--retry-all-errors)
+else
+    print_warning "curl does not support --retry-all-errors; using compatible retry options"
+fi
 RELEASE_JSON="$DOWNLOAD_DIR/release.json"
 
 print_status "Reading latest release from $GITHUB_REPO..."
-curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors \
+curl -fsSL "${CURL_RETRY_ARGS[@]}" \
     "${JSON_HEADERS[@]}" \
     "$GITHUB_API_URL/releases/latest" \
     -o "$RELEASE_JSON"
@@ -221,9 +227,9 @@ TARBALL_PATH="$DOWNLOAD_DIR/$ASSET_NAME"
 CHECKSUM_PATH="$DOWNLOAD_DIR/$CHECKSUM_NAME"
 
 print_status "Downloading API release $RELEASE_TAG..."
-curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors \
+curl -fsSL "${CURL_RETRY_ARGS[@]}" \
     "${ASSET_HEADERS[@]}" "$ASSET_URL" -o "$TARBALL_PATH"
-curl -fsSL --retry 5 --retry-delay 3 --retry-all-errors \
+curl -fsSL "${CURL_RETRY_ARGS[@]}" \
     "${ASSET_HEADERS[@]}" "$CHECKSUM_URL" -o "$CHECKSUM_PATH"
 
 EXPECTED_SHA256=$(awk 'NR == 1 { print $1 }' "$CHECKSUM_PATH")
