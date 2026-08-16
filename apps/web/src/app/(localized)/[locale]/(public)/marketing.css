@@ -1,0 +1,90 @@
+.marketing-scope {
+  --m-bg: #f6f6f3;
+  --m-surface: #ffffff;
+  --m-surface-subtle: #eeefeb;
+  --m-text: #101116;
+  --m-muted: #63656d;
+  --m-faint: #8d8f96;
+  --m-line: #dedfd9;
+  --m-line-strong: #c9cac4;
+  --m-brand: #e43d35;
+  --m-brand-hover: #c92f28;
+  --m-brand-soft: #f7e5e2;
+  --m-brand-ink: #9f2621;
+  --m-night: #11131a;
+  --m-night-soft: #191c25;
+  --m-night-line: #2b2e38;
+  --m-night-text: #f6f6f3;
+  --m-night-muted: #a9abb3;
+  color-scheme: light;
+  background: var(--m-bg);
+  color: var(--m-text);
+}
+
+.dark .marketing-scope {
+  --m-bg: #0c0e13;
+  --m-surface: #13161d;
+  --m-surface-subtle: #191c24;
+  --m-text: #f3f3ef;
+  --m-muted: #a3a6af;
+  --m-faint: #797d88;
+  --m-line: #292c35;
+  --m-line-strong: #393d48;
+  --m-brand: #ff6258;
+  --m-brand-hover: #ff766e;
+  --m-brand-soft: #2b191b;
+  --m-brand-ink: #ff8b83;
+  --m-night: #07080b;
+  --m-night-soft: #101219;
+  --m-night-line: #242731;
+  --m-night-text: #f6f6f3;
+  --m-night-muted: #9da0aa;
+  color-scheme: dark;
+}
+
+.marketing-scope ::selection {
+  background: var(--m-brand);
+  color: white;
+}
+
+.marketing-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--m-line) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--m-line) 45%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.marketing-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+}
+
+.vscode-editor,
+.vscode-editor * {
+  scrollbar-color: #3b404b transparent;
+  scrollbar-width: thin;
+}
+
+.vscode-editor ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.vscode-editor ::-webkit-scrollbar-track {
+  background: #0d0f14;
+}
+
+.vscode-editor ::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  border: 2px solid #0d0f14;
+  border-radius: 999px;
+  background: #3b404b;
+}
+
+.vscode-editor ::-webkit-scrollbar-thumb:hover {
+  background: #555c69;
+}
+
+.vscode-editor ::-webkit-scrollbar-corner {
+  background: #0d0f14;
+}

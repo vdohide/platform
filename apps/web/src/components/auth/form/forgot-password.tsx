@@ -8,7 +8,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useRef, useState } from "react";
 import { Field, FieldError, FieldGroup, FieldLabel, Input } from "@workspace/ui/components";
 import { SubmitButton } from "@workspace/ui/components";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";

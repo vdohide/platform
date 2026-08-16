@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/i18n",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:^",
+    "@workspace/typescript-config": "workspace:^",
+    "eslint": "^9",
+    "typescript": "^5"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts",
+    "./format": "./src/format.ts",
+    "./locales/en.json": "./src/locales/en.json",
+    "./locales/th.json": "./src/locales/th.json"
+  }
+}

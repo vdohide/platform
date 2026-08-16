@@ -4,7 +4,7 @@ import { setPasswordSchema, SetPasswordValidInfer } from "@workspace/core/valida
 import { cn } from "@workspace/ui/lib/utils";
 import { KeyRoundIcon } from "lucide-react";
 import { authClient } from "@workspace/auth/client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Field, FieldError, FieldGroup, FieldLabel, InputPassword } from "@workspace/ui/components";
 import { SubmitButton } from "@workspace/ui/components";
 import { zodResolver } from "@hookform/resolvers/zod";

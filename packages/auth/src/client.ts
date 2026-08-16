@@ -3,8 +3,7 @@ import { twoFactorClient, magicLinkClient, customSessionClient } from "better-au
 import type { auth } from "./config";
 
 export const authClient = createAuthClient({
-    /** แต่ละเว็บเรียก Better Auth ผ่าน same-origin /api/auth rewrite */
-    baseURL: process.env.NEXT_PUBLIC_URL,
+    /** ใช้ origin ปัจจุบัน เพื่อให้แต่ละเว็บเรียกผ่าน /api/auth rewrite ของตัวเอง */
     fetchOptions: {
         credentials: "include",
     },
